@@ -13,7 +13,7 @@ npm init
 
 ## 配置eslint
 
-```
+```zsh
 npm install eslint --save-dev
 
 ./node_modules/.bin/eslint --init
@@ -32,3 +32,19 @@ http
 ```json
 "server": "node ./index.js"
 ```
+
+## 使用express
+
+```cli
+npm i -s express
+```
+
+## 链接mysql数据库
+
+```cli
+npm install mysql -s
+```
+
+## TODO
+
+- 全局错误拦截
