@@ -45,6 +45,20 @@ npm i -s express
 npm install mysql -s
 ```
 
+## 读取excel
+
+```cli
+npm install excel node-xlsx
+
+```
+
+## 配置热更新
+
+```cli
+npm install --save-dev nodemon
+```
+
 ## TODO
 
 - 全局错误拦截
+- 热更新

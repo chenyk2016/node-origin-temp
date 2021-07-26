@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node ./src/server/index.js"
+    "server": "node ./src/server/index.js",
+    "start": "nodemon --exec 'npm run server'"
   },
   "keywords": [
     "node"
@@ -14,10 +15,13 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "^7.31.0",
-    "eslint-plugin-react": "^7.24.0"
+    "eslint-plugin-react": "^7.24.0",
+    "nodemon": "^2.0.12"
   },
   "dependencies": {
+    "excel": "^1.0.1",
     "express": "^4.17.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "node-xlsx": "^0.17.1"
   }
 }
