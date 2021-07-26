@@ -1,4 +1,6 @@
 const express = require('express')
+require('./common/express-error-handle')
+require('./common/node-error-handle')
 const DB = require('./common/mysql')
 const port = 3456
 const readExcel = require('./wheel/excel-read').readExcel
@@ -59,11 +61,9 @@ app.get('/excel', (req, res) => {
   })
 })
 
-// 错误处理
+// 路由全局错误处理
 app.use(function (err, req, res, next) {
-  console.log('======err', err)
-  res.status(500)
-  res.render('error', { error: err })
+  res.send(err.stack)
 })
 
 app.listen(port, () => {

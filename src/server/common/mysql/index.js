@@ -1,10 +1,5 @@
 const mysql = require('mysql')
 
-
-
-
-
-
 class DB {
   constructor() {
     this.connection = mysql.createConnection({
