@@ -11,8 +11,7 @@ router.get('/', (req, res) => {
 
 router.get('/user', (req, res) => {
   doSqlQuery('select * from user').then(data => {
-    console.log('======', data)
-    res.send(data)
+    res.send(JSON.stringify(data))
   }).catch(e => {
     res.send(e)
   })
@@ -58,6 +57,21 @@ router.get('/excel', (req, res) => {
   }).catch(e => {
     res.send(e)
   })
+})
+
+router.get('/file', (req, res) => {
+  if(req.hostname === 'localhost1') {
+    res.download(path.resolve('./public/static/test.txt'), 'test.txt', function(err) {
+      if(err) {
+        res.send(err.stack)
+      } else {
+        console.log('1111')
+      }
+    })
+  } else {
+    res.status(500)
+    res.send('下载非法')
+  }
 })
 
 module.exports = router
