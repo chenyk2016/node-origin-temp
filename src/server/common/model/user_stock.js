@@ -30,4 +30,4 @@ class UserStock{
   }
 }
 
-module.exports = UserStock()
+module.exports = new UserStock()
