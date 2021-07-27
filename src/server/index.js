@@ -1,5 +1,5 @@
 
-require('./common/global-var')
+require('./common/env')
 require('./common/node-error-handle')
 const port = 3456
 const app = require('./router')

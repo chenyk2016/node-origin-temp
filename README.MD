@@ -58,7 +58,8 @@ npm install excel node-xlsx
 npm install --save-dev nodemon
 ```
 
-## TODO
+## 配置读取环境变量dotenv
 
-- 全局错误拦截
-- 热更新
+  npn install dotenv
+
+## TODO
