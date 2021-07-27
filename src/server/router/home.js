@@ -6,7 +6,8 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-  res.send('Hi')
+  const env = process.env.NODE_ENV
+  res.send(`Hi，当前运行环境 ${env}`)
 })
 
 router.get('/user', (req, res) => {
@@ -60,16 +61,16 @@ router.get('/excel', (req, res) => {
 })
 
 router.get('/file', (req, res) => {
-  if(req.hostname === 'localhost' || req.hostname === 'fsgame.huaxiaoinfo.com' || req.hostname === '47.110.249.94') {
+  const referer = req.headers.referer
+  const hostname = referer && new URL(referer).hostname
+
+  if(hostname === 'localhost' || hostname === 'fsgame.huaxiaoinfo.com' || hostname === '47.110.249.94') {
     res.download(path.resolve('./public/static/test.txt'), 'test.txt', function(err) {
       if(err) {
         res.send(err.stack)
-      } else {
-        console.log('1111')
       }
     })
   } else {
-    res.status(500)
     res.send('下载非法')
   }
 })

@@ -62,4 +62,16 @@ npm install --save-dev nodemon
 
   npn install dotenv
 
+## 生产环境部署: pm2
+
+```json
+"scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "server": "node ./src/server/index.js",
+  "start": "nodemon --exec 'npm run server'",
+  "prod": "NODE_ENV=production pm2 start --name node_origin_temp ./src/server/index.js",
+  "restart:app": "pm2 restart node_origin_temp"
+}
+```
+
 ## TODO
