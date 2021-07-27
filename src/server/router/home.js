@@ -60,7 +60,7 @@ router.get('/excel', (req, res) => {
   })
 })
 
-router.get('/file', (req, res) => {
+router.get('/download', (req, res) => {
   const referer = req.headers.referer
   const hostname = referer && new URL(referer).hostname
 
