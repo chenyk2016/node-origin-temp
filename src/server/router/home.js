@@ -60,7 +60,7 @@ router.get('/excel', (req, res) => {
 })
 
 router.get('/file', (req, res) => {
-  if(req.hostname === 'localhost1') {
+  if(req.hostname === 'localhost' || req.hostname === 'fsgame.huaxiaoinfo.com' || req.hostname === '47.110.249.94') {
     res.download(path.resolve('./public/static/test.txt'), 'test.txt', function(err) {
       if(err) {
         res.send(err.stack)
