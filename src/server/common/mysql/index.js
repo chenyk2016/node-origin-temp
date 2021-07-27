@@ -8,12 +8,17 @@ class DB {
   }
 
   init() {
+    if(!MYSQL_CONFIG) {
+      throw new Error('MYSQL_CONFIG变量不存在')
+    }
+    const config = JSON.parse(MYSQL_CONFIG)
+
     this.connection = mysql.createConnection({
-      host: MYSQL_CONFIG.host, //域名,
-      port: MYSQL_CONFIG.port, //端口,
-      user: MYSQL_CONFIG.user, //用户,
-      password: MYSQL_CONFIG.password, //密码,
-      database: MYSQL_CONFIG.database , //数据库表,
+      host: config.host, //域名,
+      port: config.port, //端口,
+      user: config.user, //用户,
+      password: config.password, //密码,
+      database: config.database , //数据库表,
     })
     this.connection.connect(err => {
       if(err) throw err

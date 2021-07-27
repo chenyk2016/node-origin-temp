@@ -1,9 +1,10 @@
 
 require('./common/env')
 require('./common/node-error-handle')
-const port = 3456
 const app = require('./router')
+const SERVER_CONFIG = process.env.SERVER_CONFIG
+const serverConfig = JSON.parse(SERVER_CONFIG)
 
-app.listen(port, () => {
-  console.log(`项目运行在： http://localhost:${port}`)
+app.listen(serverConfig.port, serverConfig.host, () => {
+  console.log(`项目运行在： http://${serverConfig['host']}:${serverConfig['port']}`)
 })
