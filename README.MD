@@ -1,9 +1,46 @@
 # node项目从0-1
 
+## 运行环境
+
+1. 安装node
+2. 修改配置
+
+```bash
+├── .env.local  # 启动端口配置
+└── public   # 模拟数据
+    ├── certificate # 放置https证书
+    └── download # 放置需要下载的文件
+```
+
+## 开发
+
+```bash
+npm install
+
+npm run start
+```
+
+## 部署
+
+```bash
+npm install
+
+# 启动
+npm run prod
+
+## 重启
+npm run prod:restart
+
+## 停止
+
+npm run prod:stop
+```
+
+## 目录说明
+
 ## 创建项目
 
-```py
-
+```bash
 # 初始化git仓库，添加.gitignore文件
 git init
 
@@ -25,7 +62,7 @@ npm install eslint --save-dev
 
 http
 
-> https://nodejs.org/en/docs/guides/getting-started-guide/
+> <https://nodejs.org/en/docs/guides/getting-started-guide/>
 
 ## 配置package.json启动项目
 

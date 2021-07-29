@@ -8,7 +8,8 @@
     "server": "NODE_ENV=development node ./src/server/index.js",
     "start": "nodemon --exec 'npm run server'",
     "prod": "NODE_ENV=production pm2 start --name node_origin_temp ./src/server/index.js",
-    "restart:app": "pm2 restart node_origin_temp"
+    "prod:restart": "pm2 restart node_origin_temp",
+    "prod:stop": "pm2 stop node_origin_temp"
   },
   "keywords": [
     "node"
@@ -25,6 +26,8 @@
     "excel": "^1.0.1",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
-    "node-xlsx": "^0.17.1"
+    "node-xlsx": "^0.17.1",
+    "pm2": "^5.1.0",
+    "shelljs": "^0.8.4"
   }
 }
