@@ -1,19 +1,25 @@
 const mysql = require('mysql')
-
+const MYSQL_CONFIG = process.env.MYSQL_CONFIG
 class DB {
   constructor() {
-    this.connection = mysql.createConnection({
-      host:'127.0.0.1', //域名,
-      port:'3306', //端口,
-      user:'root', //用户,
-      password:'chenyksql' , //密码,
-      database:'node_origin_temp' , //数据库表,
-    })
+    this.connection = null
 
-    this.init()
+    // this.init()
   }
 
   init() {
+    if(!MYSQL_CONFIG) {
+      throw new Error('MYSQL_CONFIG变量不存在')
+    }
+    const config = JSON.parse(MYSQL_CONFIG)
+
+    this.connection = mysql.createConnection({
+      host: config.host, //域名,
+      port: config.port, //端口,
+      user: config.user, //用户,
+      password: config.password, //密码,
+      database: config.database , //数据库表,
+    })
     this.connection.connect(err => {
       if(err) throw err
       console.log('mysql connncted success!')

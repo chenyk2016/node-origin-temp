@@ -6,13 +6,13 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-  res.send('Hi')
+  const env = process.env.NODE_ENV
+  res.send(`Hi，当前运行环境 ${env}`)
 })
 
 router.get('/user', (req, res) => {
   doSqlQuery('select * from user').then(data => {
-    console.log('======', data)
-    res.send(data)
+    res.send(JSON.stringify(data))
   }).catch(e => {
     res.send(e)
   })
@@ -58,6 +58,26 @@ router.get('/excel', (req, res) => {
   }).catch(e => {
     res.send(e)
   })
+})
+
+router.get('/file/:filename', (req, res) => {
+  const filename = req.params.filename
+  const referer = req.headers.referer
+  const hostname = referer && new URL(referer).hostname
+  let whiteHost = ['fsgame.huaxiaoinfo.com'] // 空都允许
+
+  if(process.env.NODE_ENV === 'development') {
+    whiteHost = ['app.chen.com']
+  }
+  if(whiteHost.length === 0 || whiteHost.includes(hostname)) {
+    res.download(path.resolve(`./public/download/${filename}`), filename, function(err) {
+      if(err) {
+        res.send(err.status === 404 ? '文件不存在' : '读取文件失败')
+      }
+    })
+  } else {
+    res.send('下载地址不合法, 请前往 <a href="https://fsgame.huaxiaoinfo.com">https://fsgame.huaxiaoinfo.com</a> 下载')
+  }
 })
 
 module.exports = router
