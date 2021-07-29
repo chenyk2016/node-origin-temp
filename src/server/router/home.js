@@ -60,18 +60,23 @@ router.get('/excel', (req, res) => {
   })
 })
 
-router.get('/download', (req, res) => {
+router.get('/file/:filename', (req, res) => {
+  const filename = req.params.filename
   const referer = req.headers.referer
   const hostname = referer && new URL(referer).hostname
+  let whiteHost = ['fsgame.huaxiaoinfo.com'] // 空都允许
 
-  if(hostname === 'localhost' || hostname === 'fsgame.huaxiaoinfo.com' || hostname === '47.110.249.94') {
-    res.download(path.resolve('./public/static/test.txt'), 'test.txt', function(err) {
+  if(process.env.NODE_ENV === 'development') {
+    whiteHost = ['app.chen.com']
+  }
+  if(whiteHost.length === 0 || whiteHost.includes(hostname)) {
+    res.download(path.resolve(`./public/download/${filename}`), filename, function(err) {
       if(err) {
-        res.send(err.stack)
+        res.send(err.status === 404 ? '文件不存在' : '读取文件失败')
       }
     })
   } else {
-    res.send('下载非法')
+    res.send('下载地址不合法, 请前往 <a href="https://fsgame.huaxiaoinfo.com">https://fsgame.huaxiaoinfo.com</a> 下载')
   }
 })
 
