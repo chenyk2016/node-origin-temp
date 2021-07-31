@@ -1,6 +1,6 @@
 // 处理，express路由里面的错误，不会被全局错误处理捕获的问题
+import Layer from 'express/lib/router/layer'
 
-const Layer = require('express/lib/router/layer')
 Object.defineProperty(Layer.prototype, 'handle', {
   enumerable: true,
   get() {

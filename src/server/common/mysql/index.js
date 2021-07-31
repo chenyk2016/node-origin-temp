@@ -1,4 +1,4 @@
-const mysql = require('mysql')
+import mysql from 'mysql'
 const MYSQL_CONFIG = process.env.MYSQL_CONFIG
 class DB {
   constructor() {
@@ -98,5 +98,4 @@ class DB {
   }
 }
 
-
-module.exports = new DB()
+export default new DB()

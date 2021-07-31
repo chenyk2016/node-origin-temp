@@ -1,9 +1,10 @@
-const DB = require('../common/mysql')
-const readExcel = require('../wheel/excel-read').readExcel
-const path = require('path')
-const doSqlQuery = DB.doSqlQuery
-const express = require('express')
+import DB from '../common/mysql'
+import readExcel from '../wheel/excel-read'
+import path from 'path'
+import express from 'express'
+
 const router = express.Router()
+const doSqlQuery = DB.doSqlQuery
 
 router.get('/', (req, res) => {
   const env = process.env.NODE_ENV
@@ -80,4 +81,4 @@ router.get('/file/:filename', (req, res) => {
   }
 })
 
-module.exports = router
+export default router

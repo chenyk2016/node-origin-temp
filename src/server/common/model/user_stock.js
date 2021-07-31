@@ -1,4 +1,4 @@
-const DB = require('../mysql')
+import DB from '../mysql'
 
 class UserStock{
   constructor() {
@@ -30,4 +30,4 @@ class UserStock{
   }
 }
 
-module.exports = new UserStock()
+export default new UserStock()

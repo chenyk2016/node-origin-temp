@@ -1,8 +1,9 @@
-const express = require('express')
-require('../common/express-error-handle')
+import express from 'express'
+import home from './home'
+import self from './self'
+import '../common/express-error-handle'
+
 const app = express()
-const home = require('./home')
-const self = require('./self')
 
 app.use('/', home)
 app.use('/self', self)
@@ -12,4 +13,4 @@ app.use(function (err, req, res, next) {
   res.send(err.stack)
 })
 
-module.exports = app
+export default app

@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "NODE_ENV=development node ./src/server/index.js",
+    "server": "NODE_ENV=development node -r esm ./src/server/index.js",
+    "server:prod": "NODE_ENV=production node -r esm ./src/server/index.js",
     "start": "nodemon --exec 'npm run server'",
-    "prod": "NODE_ENV=production pm2 start --name node_origin_temp ./src/server/index.js",
+    "prod": "pm2 start --name node_origin_temp 'npm run server:prod'",
     "prod:restart": "pm2 restart node_origin_temp",
     "prod:stop": "pm2 stop node_origin_temp"
   },
@@ -17,12 +18,16 @@
   "author": "chenyk2016",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@babel/register": "^7.14.5",
     "eslint": "^7.31.0",
     "eslint-plugin-react": "^7.24.0",
     "nodemon": "^2.0.12"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.14.8",
     "dotenv": "^10.0.0",
+    "esm": "^3.2.25",
     "excel": "^1.0.1",
     "express": "^4.17.1",
     "mysql": "^2.18.1",

@@ -1,6 +1,6 @@
 // 全局变量
-const dotenv = require('dotenv')
-const path = require('path')
+import dotenv from 'dotenv'
+import path from 'path'
 
 process.env.rootPath = path.resolve('./')
 process.env.rootServerPath = path.resolve('./src/server')
