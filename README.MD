@@ -142,8 +142,38 @@ crt是由证书颁发机构（CA）签名后的证书，或者是开发者自签
     -sha256 \
     -days 3650
 
+## node支持import/export
+
+### 方法1
+
+require('@babel/register')
+
+### 方法2
+
+> 此方法， module-alias 不生效。不知原因
+
+```bash
+npm i esm
+```
+
+package.json配置script
+
+```bash
+NODE_ENV=development node -r esm ./src/server/index.js
+```
+
+## node配置alias别名
+
+```bash
+npm install module-alias
+```
+
+```json
+"_moduleAliases": {
+  "@": "src"
+}
+```
+
 ## TODO
 
-- require使用alias变量
 - host修改立即生效的方法
-- 支持import
