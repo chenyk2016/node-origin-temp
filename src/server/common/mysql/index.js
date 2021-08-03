@@ -1,10 +1,12 @@
 import mysql from 'mysql'
 const MYSQL_CONFIG = process.env.MYSQL_CONFIG
+import utils from './utils'
 class DB {
   constructor() {
     this.connection = null
 
-    // this.init()
+    this.init()
+    this.utils = utils
   }
 
   init() {
@@ -29,7 +31,7 @@ class DB {
   async doSqlQuery(sql) {
     return new Promise((resolve, reject) => {
       this.connection.query(sql, function (error, results, fields) {
-        if (error) throw error
+        if (error) reject(error)
         resolve(results, fields)
       })
     })
@@ -95,6 +97,17 @@ class DB {
 
     return '数据插入成功'
     // return sql
+  }
+
+  async update(tableName, filters, values) {
+    let valueStr = this.utils.objToSqlValStr(values)
+    let filterStr = this.utils.objToSqlFiledStr(filters)
+
+    const sql = `
+    UPDATE ${tableName} SET ${valueStr} WHERE ${filterStr}
+    `
+
+    return sql
   }
 }
 
