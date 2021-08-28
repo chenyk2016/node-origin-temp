@@ -4,7 +4,7 @@ class DB {
   constructor() {
     this.connection = null
 
-    // this.init()
+    this.init()
   }
 
   init() {
