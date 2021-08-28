@@ -84,6 +84,13 @@ class DB {
     return resObj
   }
 
+  /**
+   *
+   * @param {*} tableName
+   * @param {*} columnsName ['col_1', 'col_2']
+   * @param {*} dataArr ['col_1_value', 'col_2_value']
+   * @returns
+   */
   async insert(tableName, columnsName, dataArr) {
     const columnsNameStr = `(${columnsName.join(',')})`
     const dataStr = dataArr.map(data => {
@@ -99,6 +106,36 @@ class DB {
     // return sql
   }
 
+  /**
+   *
+   * @param {*} tableName
+   * @param {*} dataObjArr [{col_1: col_1_value}]
+   * @returns
+   */
+  async insertByObj(tableName, dataObjArr) {
+    if(!dataObjArr.length) return '未传插入数据'
+
+    const columnsName = Object.keys(dataObjArr[0])
+    // [{col_1: col_1_value}] -> [[col_1_value]]
+    const dataArr = dataObjArr.map(item => {
+      return columnsName.map(colKey => item[colKey])
+    })
+    const columnsNameStr = `(${columnsName.join(',')})`
+    const dataStr = dataArr.map(data => {
+      return `('${data.join('\',\'')}')`
+    }).join(',')
+
+    const sql = `
+      insert into ${tableName} ${columnsNameStr} VALUES ${dataStr}
+    `
+    await this.doSqlQuery(sql)
+
+    return '数据插入成功'
+    // return sql
+  }
+
+
+
   async update(tableName, filters, values) {
     let valueStr = this.utils.objToSqlValStr(values)
     let filterStr = this.utils.objToSqlFiledStr(filters)
@@ -108,6 +145,25 @@ class DB {
     `
 
     return sql
+  }
+
+  /**
+   *
+   * @param {*} tableName
+   * @param {*} columnsStr 'col_1,col_2'
+   * @param {*} filterStr ''
+   * @returns
+   */
+  async query (tableName, columnsStr, filterStr) {
+    // 设置一个默认条件
+    filterStr = filterStr ? filterStr : '1 = 1'
+
+    const sql = `
+    select ${columnsStr} from ${tableName} WHERE ${filterStr}
+    `
+
+    const data = await this.doSqlQuery(sql)
+    return data
   }
 }
 

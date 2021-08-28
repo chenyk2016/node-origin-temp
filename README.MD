@@ -177,3 +177,4 @@ npm install module-alias
 ## TODO
 
 - host修改立即生效的方法
+- express全局错误不生效了 2021/02/28

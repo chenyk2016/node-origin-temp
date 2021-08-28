@@ -1,12 +1,13 @@
 import express from 'express'
-import DBSelfStock from '../common/model/user_stock'
 const router = express.Router()
+import testDb from '@server/common/mysql/test'
 
 // 查询分组
-router.get('/group', (req, res, next) => {
-  DBSelfStock.queryGroupData().then(data => {
-    res.send(data)
+router.get('/testsql', (req, res, next) => {
+  testDb().then(msg => {
+    res.send(msg)
   })
+
 })
 
 // 更新数据
