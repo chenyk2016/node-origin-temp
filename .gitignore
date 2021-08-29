@@ -2,5 +2,7 @@
 .vscode/
 
 .Ds_Store
+
 dist/
+
 .env.local
