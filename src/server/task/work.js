@@ -45,7 +45,7 @@ const API = {
   baseData: 'http://qt.gtimg.cn/q='
 }
 
-async function queryBaseData(codes) {
+async function insertBaseData(codes) {
   const url = `${API.baseData}${codes}`
   return axios.get(url, {
     headers: {
@@ -95,7 +95,7 @@ async function queryBaseData(codes) {
 }
 
 export async function doBaseDataTask() {
-  let stockList = await DB.query('user_stock', 'code', 'group_id != \'st\'')
+  let stockList = await DB.query('user_stock', 'code', 'group_id = \'st\'')
   // console.log(stockList)
   stockList = stockList.map(v => {
 
@@ -115,7 +115,7 @@ export async function doBaseDataTask() {
     const codes = stockList.slice(pos, pos + step).join(',')
     console.log(codes)
     pos += step
-    promise.push(queryBaseData(codes))
+    promise.push(insertBaseData(codes))
   } while (pos < total)
 
   await Promise.all(promise)

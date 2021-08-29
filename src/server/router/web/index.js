@@ -1,5 +1,5 @@
 import express from 'express'
-import { renderReact } from '@s/server/utils/index'
+import { renderReact } from '@/server/utils/index'
 
 const router = express.Router()
 

@@ -1,6 +1,7 @@
 import mysql from 'mysql'
 const MYSQL_CONFIG = process.env.MYSQL_CONFIG
 import utils from './utils'
+import _ from '@/utils'
 class DB {
   constructor() {
     this.connection = null
@@ -29,6 +30,7 @@ class DB {
   }
 
   async doSqlQuery(sql) {
+    console.log('====sql:', sql)
     return new Promise((resolve, reject) => {
       this.connection.query(sql, function (error, results, fields) {
         if (error) reject(error)
@@ -73,7 +75,7 @@ class DB {
     const sql = `
       select column_name,column_comment,column_type,column_key from information_schema.Columns where table_name='${tableName}'
     `
-    const columnsArr = this.doSqlQuery(sql)
+    const columnsArr = await this.doSqlQuery(sql)
 
     const resObj = _columns.reduce((resObj, columnName) => {
       if(columnsArr.some(row => row.column_name === columnName) ) {
@@ -82,6 +84,15 @@ class DB {
     }, {})
 
     return resObj
+  }
+
+  // 获取表的列数据和描述
+  async tableColumns(tableName) {
+    const sql = `
+      select column_name column_name,column_comment column_comment from information_schema.Columns where table_name='${tableName}'
+    `
+    const columnsArr = await this.doSqlQuery(sql)
+    return columnsArr
   }
 
   /**
@@ -109,10 +120,13 @@ class DB {
   /**
    *
    * @param {*} tableName
-   * @param {*} dataObjArr [{col_1: col_1_value}]
+   * @param {*} dataObjArr | dataObj [{col_1: col_1_value}]
    * @returns
    */
   async insertByObj(tableName, dataObjArr) {
+    if(_.isObject(dataObjArr)) {
+      dataObjArr = [dataObjArr]
+    }
     if(!dataObjArr.length) return '未传插入数据'
 
     const columnsName = Object.keys(dataObjArr[0])
@@ -135,7 +149,7 @@ class DB {
   }
 
 
-
+  // 待验证
   async update(tableName, filters, values) {
     let valueStr = this.utils.objToSqlValStr(values)
     let filterStr = this.utils.objToSqlFiledStr(filters)
@@ -143,8 +157,28 @@ class DB {
     const sql = `
     UPDATE ${tableName} SET ${valueStr} WHERE ${filterStr}
     `
-
     return sql
+  }
+
+  /**
+   *
+   * @param {*} tableName
+   * @param {obj} objValues
+   * @param {str} filterKey
+   * @returns
+   */
+  async updateByObj(tableName, objValues, filterKey) {
+    const filters = `${filterKey} = '${objValues[filterKey]}'`
+    if(!filters) throw `${filterKey}未传`
+
+    let valueStr = this.utils.objToSqlValStr(objValues)
+
+    const sql = `
+    UPDATE ${tableName} SET ${valueStr} WHERE ${filters}
+    `
+
+    await this.doSqlQuery(sql)
+    return '更新成功'
   }
 
   /**

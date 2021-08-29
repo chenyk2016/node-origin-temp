@@ -9,6 +9,31 @@ router.get('/group', (req, res, next) => {
   })
 })
 
+router.get('/all', (req, res, next) => {
+  DBSelfStock.queryAllData().then(data => {
+    res.send(data)
+  })
+})
+
+router.post('/group', (req, res, next) => {
+  DBSelfStock.updateStock(req.body).then(data => {
+    res.send(data)
+  })
+})
+
+router.post('/add', (req, res, next) => {
+  DBSelfStock.add(req.body).then(data => {
+    res.send(data)
+  })
+})
+
+router.get('/conf', (req, res, next) => {
+  DBSelfStock.tableInfo().then(data => {
+    res.send(data)
+  })
+})
+
+
 // 更新数据
 
 // router.get('/code', (req, res, next) => {

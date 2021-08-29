@@ -19,6 +19,7 @@ app.use(function (req, res, next) {
     next()
 })
 
+app.use(express.json())
 app.use('/api', home)
 app.use('/api/self', self)
 app.use('/api/task', task.router)

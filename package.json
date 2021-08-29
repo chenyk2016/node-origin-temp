@@ -50,7 +50,7 @@
     "webpack-merge": "^5.8.0"
   },
   "_moduleAliases": {
-    "@s": "src",
+    "@": "src",
     "@r": ".",
     "@server": "src/server"
   },

@@ -1,4 +1,5 @@
 import DB from '../mysql'
+import dayjs from 'dayjs'
 
 class UserStock{
   constructor() {
@@ -7,6 +8,11 @@ class UserStock{
 
   init() {
 
+  }
+
+  async tableInfo() {
+    const columns = await DB.tableColumns(this.tableName)
+    return columns
   }
 
   // 找出所有的的groupId
@@ -44,12 +50,43 @@ class UserStock{
     })
   }
 
-  async updateStock(filters, values) {
-    const res = DB.update('user_stock', {
-      short_name: '中公教育'
-    }, {
-      code: '00',
-    })
+  async queryAllData() {
+    const sql = `
+    SELECT * from user_stock
+    order by create_dt desc
+    `
+
+    return DB.doSqlQuery(sql)
+  }
+
+  /**
+   *
+   * @param {obj} objData {}
+   * @param {str} filterKey 'code'
+   * @returns
+   */
+  async updateStock(objData, filterKey = 'code') {
+    const data = {
+      ...objData,
+      update_dt: dayjs().format('YYYY-MM-DD HH-mm-ss'),
+    }
+    const res = await DB.updateByObj(this.tableName, data, filterKey)
+
+    return res
+  }
+
+  /**
+   *
+   * @param {obj} objData {}
+   * @param {str} filterKey 'code'
+   * @returns
+   */
+  async add(objData) {
+    const data = {
+      ...objData,
+      create_dt: dayjs().format('YYYY-MM-DD HH-mm-ss'),
+    }
+    const res = await DB.insertByObj(this.tableName, data)
 
     return res
   }
