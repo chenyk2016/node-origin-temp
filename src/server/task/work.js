@@ -95,7 +95,15 @@ async function insertBaseData(codes) {
 }
 
 export async function doBaseDataTask() {
-  let stockList = await DB.query('user_stock', 'code', 'group_id = \'st\'')
+  // 每天收盘后执行
+  const date = dayjs(`${dayjs().format('YYYY-MM-DD')} 15:05:00`)
+  const endDayTs = date.valueOf()
+  const nowDateTs = Date.now()
+
+  if (nowDateTs < endDayTs) {
+    return '时间未到收盘后'
+  }
+  let stockList = await DB.query('user_stock', 'code')
   // console.log(stockList)
   stockList = stockList.map(v => {
 
