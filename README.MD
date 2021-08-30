@@ -146,3 +146,5 @@ crt是由证书颁发机构（CA）签名后的证书，或者是开发者自签
 
 - require使用alias变量
 - host修改立即生效的方法
+- express-session 登录验证
+- 请求超时处理 'express-timeout-handler'
