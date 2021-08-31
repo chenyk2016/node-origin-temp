@@ -45,6 +45,10 @@ const API = {
   baseData: 'http://qt.gtimg.cn/q='
 }
 
+
+let TaskTimeId = null
+const stockCloseTime = '15:05:00' // 股市关闭时间，（延迟5分钟）
+
 async function insertBaseData(codes) {
   const url = `${API.baseData}${codes}`
   return axios.get(url, {
@@ -96,15 +100,18 @@ async function insertBaseData(codes) {
 
 export async function doBaseDataTask() {
   // 每天收盘后执行
-  const date = dayjs(`${dayjs().format('YYYY-MM-DD')} 15:05:00`)
+  const dataStr = dayjs().format('YYYY-MM-DD')
+  const date = dayjs(`${dataStr} ${stockCloseTime}`)
   const endDayTs = date.valueOf()
   const nowDateTs = Date.now()
 
   if (nowDateTs < endDayTs) {
-    return '时间未到收盘后'
+    console.log(dataStr, 'doBaseDataTask: 时间未到收盘后')
+    return ''
   }
+
+  console.log(dataStr, 'doBaseDataTask: 开始任务')
   let stockList = await DB.query('user_stock', 'code')
-  // console.log(stockList)
   stockList = stockList.map(v => {
 
     let code = v.code.toLowerCase()
@@ -119,13 +126,57 @@ export async function doBaseDataTask() {
   const step = 20
   let pos = 0
   const promise = []
-  do {
-    const codes = stockList.slice(pos, pos + step).join(',')
-    console.log(codes)
-    pos += step
-    promise.push(insertBaseData(codes))
-  } while (pos < total)
+  try {
+    do {
+      const codes = stockList.slice(pos, pos + step).join(',')
+      pos += step
+      promise.push(insertBaseData(codes))
+    } while (pos < total)
 
-  await Promise.all(promise)
-  return '任务成功'
+    await Promise.all(promise)
+
+    console.log(dataStr, 'doBaseDataTask: 任务成功')
+  } catch (error) {
+    console.log(dataStr, 'doBaseDataTask: 任务失败')
+    console.log(error.message)
+  }
+
+
+
+
+}
+
+async function loop () {
+  if(TaskTimeId) {
+    clearTimeout(TaskTimeId)
+  }
+  const nowDate = Date.now()
+  const dataStr = dayjs().format('YYYY-MM-DD')
+  const dateEnd = dayjs(`${dataStr} ${stockCloseTime}`)
+  const tomorrowEnd = dayjs(`${dayjs().add(1, 'day').format('YYYY-MM-DD')} ${stockCloseTime}`)
+  let step, msg
+
+  if(nowDate > dateEnd.valueOf()) {
+    console.log(`开始执行同步数据任务 ${dataStr}`)
+    step = tomorrowEnd - nowDate
+    doBaseDataTask()
+  } else {
+    step = dateEnd - nowDate
+    console.log(`未到收盘时间, 任务将在${step / 3600/ 1000}h后执行`)
+  }
+
+  TaskTimeId = setTimeout(() => {
+    loop()
+  }, step)
+
+  return msg
+}
+
+
+export default {
+  async start() {
+    if(TaskTimeId) return '任务已经在运行'
+    loop()
+    return '任务开始运行'
+  },
 }
