@@ -25,7 +25,7 @@ class DB {
     })
     this.connection.connect(err => {
       if(err) throw err
-      console.log('mysql connncted success!')
+      console.log(`mysql connncted ${config.user}@${config.host} success!`)
     })
   }
 
