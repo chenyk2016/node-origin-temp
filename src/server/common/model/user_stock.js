@@ -26,7 +26,7 @@ class UserStock{
     const sql = `
     SELECT * from user_stock
     where group_id = '${group_id}'
-    order by group_id , short_name , create_dt
+    order by create_dt desc
     `
     return DB.doSqlQuery(sql)
   }
@@ -53,6 +53,7 @@ class UserStock{
   async queryAllData() {
     const sql = `
     SELECT * from user_stock
+    where group_id != 'ST'
     order by create_dt desc
     `
 

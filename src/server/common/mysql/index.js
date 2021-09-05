@@ -4,7 +4,7 @@ import utils from './utils'
 import _ from '@/utils'
 class DB {
   constructor() {
-    this.connection = null
+    this.pool = null
 
     this.init()
     this.utils = utils
@@ -16,31 +16,40 @@ class DB {
     }
     const config = JSON.parse(MYSQL_CONFIG)
 
-    this.connection = mysql.createConnection({
+    this.pool = mysql.createPool({
+      connectionLimit : 10,
       host: config.host, //域名,
       port: config.port, //端口,
       user: config.user, //用户,
       password: config.password, //密码,
       database: config.database , //数据库表,
     })
-    this.connection.connect(err => {
-      if(err) throw err
-      console.log(`mysql connncted ${config.user}@${config.host} success!`)
+
+    this.doSqlQuery('SELECT 1 + 1 AS solution').then(() => {
+      console.log(`mysql connected ${config.user}@${config.host} success!`)
+    }).catch(e => {
+      console.log(`mysql connected ${config.user}@${config.host} error!!!`, e.message)
     })
   }
 
   async doSqlQuery(sql) {
+    // getConnection
     console.log('====sql:', sql)
+
     return new Promise((resolve, reject) => {
-      this.connection.query(sql, function (error, results, fields) {
-        if (error) reject(error)
+      this.pool.query(sql, function (error, results, fields) {
+        if (error) {
+          console.log('====sql error:', error)
+
+          reject(error)
+        }
         resolve(results, fields)
       })
     })
   }
 
   async tableExist(tableName) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const sql = `
       SELECT table_name FROM information_schema.TABLES WHERE table_name ='${tableName}';
       `
@@ -118,7 +127,8 @@ class DB {
   }
 
   /**
-   *
+   * 通过对象的形式插入数据，
+   * 会过滤掉 undefined 和 null
    * @param {*} tableName
    * @param {*} dataObjArr | dataObj [{col_1: col_1_value}]
    * @returns
@@ -151,7 +161,9 @@ class DB {
 
   // 待验证
   async update(tableName, filters, values) {
-    let valueStr = this.utils.objToSqlValStr(values)
+    const cleanData = this.utils.cleanObj(values)
+
+    let valueStr = this.utils.objToSqlValStr(cleanData)
     let filterStr = this.utils.objToSqlFiledStr(filters)
 
     const sql = `
@@ -168,10 +180,12 @@ class DB {
    * @returns
    */
   async updateByObj(tableName, objValues, filterKey) {
-    const filters = `${filterKey} = '${objValues[filterKey]}'`
+    const cleanData = this.utils.cleanObj(objValues)
+
+    const filters = `${filterKey} = '${cleanData[filterKey]}'`
     if(!filters) throw `${filterKey}未传`
 
-    let valueStr = this.utils.objToSqlValStr(objValues)
+    let valueStr = this.utils.objToSqlValStr(cleanData)
 
     const sql = `
     UPDATE ${tableName} SET ${valueStr} WHERE ${filters}
