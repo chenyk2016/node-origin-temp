@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import webpack from 'webpack'
 import { merge } from 'webpack-merge'
-const webpackBaseConfig = require('@r/webpack.base.config.js')
+const webpackBaseConfig = require('@root/webpack.base.config.js')
 
 export async function renderReact(componentName) {
   const webpackConfig = merge(webpackBaseConfig, {

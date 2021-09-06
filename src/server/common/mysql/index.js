@@ -2,15 +2,14 @@ import mysql from 'mysql'
 const MYSQL_CONFIG = process.env.MYSQL_CONFIG
 import utils from './utils'
 import _ from '@/utils'
+
 class DB {
   constructor() {
     this.pool = null
-
-    this.init()
     this.utils = utils
   }
 
-  init() {
+  async connect() {
     if(!MYSQL_CONFIG) {
       throw new Error('MYSQL_CONFIG变量不存在')
     }
@@ -25,21 +24,29 @@ class DB {
       database: config.database , //数据库表,
     })
 
-    this.doSqlQuery('SELECT 1 + 1 AS solution').then(() => {
-      console.log(`mysql connected ${config.user}@${config.host} success!`)
+    const msg = await this.doSqlQuery('SELECT 1 + 1 AS solution').then(() => {
+      const m = `mysql connected ${config.user}@${config.host} success!`
+      console.log(m)
+      return m
     }).catch(e => {
-      console.log(`mysql connected ${config.user}@${config.host} error!!!`, e.message)
+      const m = `mysql connected ${config.user}@${config.host} error!!! ${e.message}`
+      // console.log(m)
+      throw new Error(m)
     })
+
+    return msg
   }
 
-  async doSqlQuery(sql) {
+  async doSqlQuery(sql, silent = false) {
     // getConnection
-    console.log('====sql:', sql)
+    if(!silent) {
+      console.log('====sql:', sql)
+    }
 
     return new Promise((resolve, reject) => {
       this.pool.query(sql, function (error, results, fields) {
         if (error) {
-          console.log('====sql error:', error)
+          console.log('====sql error:', error.message)
 
           reject(error)
         }

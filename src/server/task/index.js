@@ -1,2 +1,4 @@
 import router from './router'
-export default { router }
+import manager from './manager'
+
+export default { router, manager }

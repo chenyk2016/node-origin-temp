@@ -51,7 +51,7 @@
   },
   "_moduleAliases": {
     "@": "src",
-    "@r": ".",
+    "@root": ".",
     "@server": "src/server"
   },
   "_moduleDirectories": [

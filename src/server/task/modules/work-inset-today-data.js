@@ -47,7 +47,13 @@ const API = {
 
 
 let TaskTimeId = null
+let nextJobStep = 0
+let
 const stockCloseTime = '15:05:00' // 股市关闭时间，（延迟5分钟）
+
+// function log() {
+//   console.log(dataStr, 'doBaseDataTask: 时间未到收盘后')
+// }
 
 async function insertBaseData(codes) {
   const url = `${API.baseData}${codes}`
@@ -138,12 +144,8 @@ export async function doBaseDataTask() {
     console.log(dataStr, 'doBaseDataTask: 任务成功')
   } catch (error) {
     console.log(dataStr, 'doBaseDataTask: 任务失败')
-    console.log(error.message)
+    // console.log(error.message)
   }
-
-
-
-
 }
 
 async function loop () {
@@ -152,22 +154,26 @@ async function loop () {
   }
   const nowDate = Date.now()
   const dataStr = dayjs().format('YYYY-MM-DD')
-  const dateEnd = dayjs(`${dataStr} ${stockCloseTime}`)
-  const tomorrowEnd = dayjs(`${dayjs().add(1, 'day').format('YYYY-MM-DD')} ${stockCloseTime}`)
-  let step, msg
+  const datelineToday = dayjs(`${dataStr} ${stockCloseTime}`)
+  const datelineTomorrow = dayjs(`${dayjs().add(1, 'day').format('YYYY-MM-DD')} ${stockCloseTime}`)
+  let msg
 
-  if(nowDate > dateEnd.valueOf()) {
-    console.log(`开始执行同步数据任务 ${dataStr}`)
-    step = tomorrowEnd - nowDate
+  if(nowDate > datelineToday.valueOf()) {
+    msg = `开始执行同步数据任务 ${dataStr}`
+
+    nextJobStep = datelineTomorrow - nowDate
     doBaseDataTask()
   } else {
-    step = dateEnd - nowDate
-    console.log(`未到收盘时间, 任务将在${step / 3600/ 1000}h后执行`)
+    nextJobStep = datelineToday - nowDate
+    msg = `未到收盘时间, 任务将在${nextJobStep / 3600/ 1000}h 后执行`
   }
+
+  console.log(`下一次同步数据是在 ${nextJobStep/1000}s 后`)
+  console.log(msg)
 
   TaskTimeId = setTimeout(() => {
     loop()
-  }, step)
+  }, nextJobStep)
 
   return msg
 }
@@ -175,8 +181,7 @@ async function loop () {
 
 export default {
   async start() {
-    if(TaskTimeId) return '任务已经在运行'
-    loop()
-    return '任务开始运行'
+    if(TaskTimeId) return `任务已经在运行, 下次任务在${nextJobStep / 3600 / 1000}s之后运行`
+    return await loop()
   },
 }
