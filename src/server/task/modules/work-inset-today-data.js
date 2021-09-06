@@ -48,7 +48,6 @@ const API = {
 
 let TaskTimeId = null
 let nextJobStep = 0
-let
 const stockCloseTime = '15:05:00' // 股市关闭时间，（延迟5分钟）
 
 // function log() {
