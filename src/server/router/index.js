@@ -1,8 +1,8 @@
 import express from 'express'
-import home from './home'
-import self from './self'
+// import home from './home'
+// import self from './self'
 import web from './web'
-import task from '@server/task'
+// import task from '@server/task'
 import test from './test'
 import '../common/express-error-handle'
 
@@ -20,10 +20,11 @@ app.use(function (req, res, next) {
 })
 
 app.use(express.json())
-app.use('/api', home)
-app.use('/api/self', self)
-app.use('/api/task', task.router)
+// app.use('/api', home)
+// app.use('/api/self', self)
+// app.use('/api/task', task.router)
 app.use('/api/test', test)
+
 
 app.use('/web', web)
 
