@@ -1,18 +1,18 @@
 import express from 'express'
-// import home from './home'
-// import self from './self'
 import web from './web'
-// import task from '@server/task'
-import test from './test'
+import home from './home'
+import httpTest from './http-test'
 import '../common/express-error-handle'
 
 const app = express()
 
+app.set('etag', false)
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Origin', '*')
   //允许的header类型
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-  res.header('Access-Control-Allow-Methods','DELETE,PUT,POST,GET,OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+  res.setHeader('Access-Control-Allow-Methods','DELETE,PUT,POST,GET,OPTIONS')
+
   if (req.method.toLowerCase() == 'options')
     res.send(200)  //让options尝试请求快速结束
   else
@@ -20,17 +20,15 @@ app.use(function (req, res, next) {
 })
 
 app.use(express.json())
-// app.use('/api', home)
-// app.use('/api/self', self)
-// app.use('/api/task', task.router)
-app.use('/api/test', test)
 
 
+app.use('/', home)
 app.use('/web', web)
+app.use('/http-test', httpTest)
 
 // 路由全局错误处理
 app.use(function (err, req, res, next) {
-  res.send(err.stack)
+  res.status(500).send(err.stack)
 })
 
 export default app

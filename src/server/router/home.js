@@ -1,23 +1,14 @@
-import DB from '../common/mysql'
 import readExcel from '../wheel/excel-read'
 import path from 'path'
 import express from 'express'
 
 const router = express.Router()
-const doSqlQuery = DB.doSqlQuery
 
 router.get('/', (req, res) => {
   const env = process.env.NODE_ENV
   res.send(`Hi，当前运行环境 ${env}`)
 })
 
-router.get('/user', (req, res) => {
-  doSqlQuery('select * from user').then(data => {
-    res.send(JSON.stringify(data))
-  }).catch(e => {
-    res.send(e)
-  })
-})
 
 router.get('/excel', (req, res) => {
   readExcel(path.resolve('./public/data.xls')).then(data => {
