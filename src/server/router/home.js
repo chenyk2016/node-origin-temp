@@ -1,4 +1,4 @@
-import readExcel from '../wheel/excel-read'
+import readExcel from '../lib/excel-read'
 import path from 'path'
 import express from 'express'
 
