@@ -2,7 +2,7 @@ const express = require('express')
 require('../common/express-error-handle')
 const app = express()
 const home = require('./home')
-const self = require('./self')
+// const self = require('./self')
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -15,7 +15,7 @@ app.use(function (req, res, next) {
     next()
 })
 app.use('/', home)
-app.use('/self', self)
+// app.use('/self', self)
 
 // 路由全局错误处理
 app.use(function (err, req, res, next) {

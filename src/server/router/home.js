@@ -1,7 +1,5 @@
-const DB = require('../common/mysql')
 const readExcel = require('../wheel/excel-read').readExcel
 const path = require('path')
-const doSqlQuery = DB.doSqlQuery
 const express = require('express')
 const router = express.Router()
 
@@ -10,13 +8,6 @@ router.get('/', (req, res) => {
   res.send(`Hi，当前运行环境 ${env}`)
 })
 
-router.get('/user', (req, res) => {
-  doSqlQuery('select * from user').then(data => {
-    res.send(JSON.stringify(data))
-  }).catch(e => {
-    res.send(e)
-  })
-})
 
 router.get('/excel', (req, res) => {
   readExcel(path.resolve('./public/data.xls')).then(data => {
