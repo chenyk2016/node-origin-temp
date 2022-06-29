@@ -13,6 +13,12 @@ import certificate from '../../public/certificate'
 import https from 'https'
 
 const SERVER_CONFIG = process.env.SERVER_CONFIG
+
+// 检查环境变量配置
+if (!SERVER_CONFIG) {
+  throw "环境变量配置错误";
+}
+
 const serverConfig = JSON.parse(SERVER_CONFIG)
 
 app.listen(serverConfig.port, serverConfig.host, () => {
