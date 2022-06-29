@@ -1,5 +1,13 @@
 # node项目从0-1
 
+## 分支说明
+
+master-es6 node es6模版
+
+master-stock 股票数据后台
+
+master-ssr react-ssr分支
+
 ## 运行环境
 
 1. 安装node
