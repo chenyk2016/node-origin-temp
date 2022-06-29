@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run server",
+    "start": "npm run dev",
     "server": "NODE_ENV=development node ./src/server/babel.js",
     "server:debugger": "NODE_ENV=development node --inspect ./src/server/babel.js",
     "server:prod": "NODE_ENV=production node ./src/server/babel.js",
