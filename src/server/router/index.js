@@ -1,5 +1,6 @@
 import express from 'express'
 import routes from './routeConf';
+import '@server/common/express-error-handle';
 
 const app = express()
 
@@ -30,14 +31,13 @@ app.get('/', (req, res) => {
   })
 })
 
-
 routes.forEach(route => {
   app.use(route.path, route.router);
 })
 
-app.get('*', (req, res) => {
-  res.status(404).send('路径不存在')
-})
+// app.get('*', (req, res) => {
+//   res.status(404).send('路径不存在')
+// })
 
 // 路由全局错误处理
 app.use(function (err, req, res, next) {

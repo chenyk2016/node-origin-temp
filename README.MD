@@ -174,11 +174,6 @@ npm install module-alias
 }
 ```
 
-## dotenv 配置环境变量
-
-## puppeteer 在服务端打开浏览器
-
 ## TODO
-
-- host修改立即生效的方法
+## puppeteer 在服务端打开浏览器
 - express全局错误不生效了 2021/02/28

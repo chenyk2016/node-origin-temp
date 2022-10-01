@@ -1,12 +1,13 @@
-import readExcel from '@server/lib/excel-read'
+import { readExcel } from '@server/lib/excel-read'
 import path from 'path'
 import express from 'express'
 
 const router = express.Router()
 
-
 router.get('/excel', (req, res) => {
-  readExcel(path.resolve('./public/data.xls')).then(data => {
+  console.log(readExcel);
+
+  readExcel(path.resolve(process.env.rootPath, './public/data.xls')).then(data => {
 
     res.send(data)
     // const tableName = ['user_stock', 'user_stock', 'china_stock']
