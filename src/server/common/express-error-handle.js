@@ -14,6 +14,7 @@ Object.defineProperty(Layer.prototype, 'handle', {
         Promise.resolve()
           .then(() => fn(req, res, next))
           .catch((err) => {
+            // next需要是 Error 类型，才会进入express错误处理程序
             if (Object.prototype.toString.call(err) === '[object Error]') {
               next(err);
             } else {

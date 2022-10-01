@@ -5,8 +5,6 @@ import express from 'express'
 const router = express.Router()
 
 router.get('/excel', (req, res) => {
-  console.log(readExcel);
-
   readExcel(path.resolve(process.env.rootPath, './public/data.xls')).then(data => {
 
     res.send(data)
