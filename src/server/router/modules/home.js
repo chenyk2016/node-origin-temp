@@ -1,13 +1,8 @@
-import readExcel from '../lib/excel-read'
+import readExcel from '@server/lib/excel-read'
 import path from 'path'
 import express from 'express'
 
 const router = express.Router()
-
-router.get('/', (req, res) => {
-  const env = process.env.NODE_ENV
-  res.send(`Hi，当前运行环境 ${env}`)
-})
 
 
 router.get('/excel', (req, res) => {

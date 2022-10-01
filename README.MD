@@ -176,6 +176,8 @@ npm install module-alias
 
 ## dotenv 配置环境变量
 
+## puppeteer 在服务端打开浏览器
+
 ## TODO
 
 - host修改立即生效的方法

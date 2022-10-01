@@ -3,7 +3,6 @@ import { renderReact } from '@/server/utils/index'
 
 const router = express.Router()
 
-
 router.get('/', (req, res) => {
   // const env = process.env.NODE_ENV
   // res.send(`Hi，当前运行环境 ${env}`)

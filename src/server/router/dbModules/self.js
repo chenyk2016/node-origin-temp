@@ -1,5 +1,5 @@
 import express from 'express'
-import DBSelfStock from '../common/model/user_stock'
+import DBSelfStock from '../../common/model/user_stock'
 const router = express.Router()
 
 // 查询分组

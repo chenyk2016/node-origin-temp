@@ -1,11 +1,9 @@
 import express from 'express'
-import web from './web'
-import home from './home'
-import httpTest from './http-test'
-import '../common/express-error-handle'
+import routes from './routeConf';
 
 const app = express()
 
+// 全局处理
 app.set('etag', false)
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -18,13 +16,28 @@ app.use(function (req, res, next) {
   else
     next()
 })
-
 app.use(express.json())
 
+// 注册用户路由
+app.get('/', (req, res) => {
+  const env = process.env.NODE_ENV;
+  res.send({
+    message: `Hi，当前运行环境 ${env}`,
+    routers: routes.map(item => ({
+      name: item.name,
+      path: item.path,
+    }))
+  })
+})
 
-app.use('/', home)
-app.use('/web', web)
-app.use('/http-test', httpTest)
+
+routes.forEach(route => {
+  app.use(route.path, route.router);
+})
+
+app.get('*', (req, res) => {
+  res.status(404).send('路径不存在')
+})
 
 // 路由全局错误处理
 app.use(function (err, req, res, next) {
