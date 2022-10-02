@@ -76,6 +76,45 @@ http
 npm i -s express
 ```
 
+### express 全局错误拦截
+
+```js
+// 路由全局错误处理
+app.use(function (err, req, res, next) {
+  res.status(500).send(err.stack)
+})
+```
+
+### express 无法拦截promise错误的处理
+
+```javascript
+// 处理，express路由里面的promise错误，不会被全局错误处理捕获的问题
+import Layer from 'express/lib/router/layer'
+Object.defineProperty(Layer.prototype, 'handle', {
+  enumerable: true,
+  get() {
+    return this.__handle
+  },
+  set(fn) {
+    if (fn.length === 4) {
+      this.__handle = fn
+    } else {
+      this.__handle = (req, res, next) =>
+        Promise.resolve()
+          .then(() => fn(req, res, next))
+          .catch((err) => {
+            // next需要是 Error 类型，才会进入express错误处理程序
+            if (Object.prototype.toString.call(err) === '[object Error]') {
+              next(err);
+            } else {
+              next(new Error(err));
+            }
+          })
+    }
+  },
+})
+```
+
 ## 链接mysql数据库
 
 ```cli
@@ -176,4 +215,3 @@ npm install module-alias
 
 ## TODO
 ## puppeteer 在服务端打开浏览器
-- express全局错误不生效了 2021/02/28
