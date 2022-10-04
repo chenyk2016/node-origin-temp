@@ -1,8 +1,12 @@
 import express from 'express'
-import routes from './routeConf';
-import '@server/common/express-error-handle';
+import router from './routeConf';
+import '@server/common/express-promise-error-handle';
+import myRedis from '@server/redis/redis';
+import path from 'path';
 
 const app = express()
+
+myRedis.connect();
 
 // 全局处理
 app.set('etag', false)
@@ -18,22 +22,15 @@ app.use(function (req, res, next) {
     next()
 })
 app.use(express.json())
+// app.use(express.urlencoded()) // 需要验证
+// app.use(express.query()) // 需要验证
 
-// 注册用户路由
-app.get('/', (req, res) => {
-  const env = process.env.NODE_ENV;
-  res.send({
-    message: `Hi，当前运行环境 ${env}`,
-    routers: routes.map(item => ({
-      name: item.name,
-      path: item.path,
-    }))
-  })
-})
+//static file
+app.use('/public', express.static(process.env.rootPath + '/public'));
 
-routes.forEach(route => {
-  app.use(route.path, route.router);
-})
+app.use(myRedis.useSession())
+
+app.use(router);
 
 // 路由全局错误处理
 app.use(function (err, req, res, next) {

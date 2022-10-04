@@ -4,7 +4,7 @@ import express from 'express'
 
 const router = express.Router()
 
-router.get('/excel', (req, res) => {
+export function parseExcel (req, res) {
   readExcel(path.resolve(process.env.rootPath, './public/data.xls')).then(data => {
 
     res.send(data)
@@ -44,9 +44,9 @@ router.get('/excel', (req, res) => {
   }).catch(e => {
     res.send(e)
   })
-})
+}
 
-router.get('/file/:filename', (req, res) => {
+export function downloadFIle (req, res) {
   const filename = req.params.filename
   const referer = req.headers.referer
   const hostname = referer && new URL(referer).hostname
@@ -64,6 +64,6 @@ router.get('/file/:filename', (req, res) => {
   } else {
     res.send('下载地址不合法, 请前往 <a href="https://fsgame.huaxiaoinfo.com">https://fsgame.huaxiaoinfo.com</a> 下载')
   }
-})
+}
 
 export default router

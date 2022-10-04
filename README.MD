@@ -213,5 +213,21 @@ npm install module-alias
 }
 ```
 
+## redis的使用
+
+```bash
+npm install redis
+```
+
+## TODO node使用typescript
+
+tsc 或者 babel
+
+https://zhuanlan.zhihu.com/p/496110569
+
 ## TODO
-## puppeteer 在服务端打开浏览器
+
+- puppeteer 在服务端打开浏览器并操作
+
+- 增加登录态的验证
+- node 使用ts
