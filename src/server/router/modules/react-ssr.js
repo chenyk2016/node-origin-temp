@@ -1,9 +1,6 @@
-import express from 'express'
 import { renderReact } from '@/server/utils/index'
 
-const router = express.Router()
-
-router.get('/', (req, res) => {
+export function reactSsr (req, res) {
   // const env = process.env.NODE_ENV
   // res.send(`Hi，当前运行环境 ${env}`)
   renderReact('home').then(code => {
@@ -13,6 +10,4 @@ router.get('/', (req, res) => {
     })
     res.send(code)
   })
-})
-
-export default router
+}

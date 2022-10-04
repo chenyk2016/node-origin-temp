@@ -1,9 +1,5 @@
 // 测试http请求
-import express from 'express'
-
-const router = express.Router()
-
-router.get('/', (req, res) => {
+export function getEtag (req, res) {
   console.log(req.query)
   // const query = req.query
   // const cacheControlRes = query.ch
@@ -16,10 +12,10 @@ router.get('/', (req, res) => {
   res.setHeader('Last-Modified', new Date('2021/1/2').toUTCString())
 
   res.send('1234567891')
-})
+}
 
 
-router.post('/', (req, res) => {
+export function postEtag (req, res) {
   console.log(req.query)
   // const query = req.query
   // const cacheControlRes = query.ch
@@ -31,7 +27,4 @@ router.post('/', (req, res) => {
   res.setHeader('Expires', `${Date.now() + 1000000}`)
 
   res.send({a:2})
-})
-
-
-export default router
+}

@@ -1,10 +1,7 @@
-import express from 'express'
 import puppeteer from 'puppeteer-core';
-
 import findChrome from 'carlo/lib/find_chrome';
-const router = express.Router()
 
-router.get('/', (req, res) => {
+export function puppeteerStart (req, res) {
 
  findChrome({}).then(res => {
   console.log(22, res.executablePath);
@@ -21,6 +18,4 @@ router.get('/', (req, res) => {
  })
 
   res.send(`启动 puppeteer`)
-})
-
-export default router;
+}
