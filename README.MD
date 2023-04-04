@@ -225,6 +225,27 @@ tsc 或者 babel
 
 https://zhuanlan.zhihu.com/p/496110569
 
+1. 安装:
+
+```shell
+npm install typescript --save
+npm install ts-node --save
+```
+
+2. 生成配置文件`tsconfig.json`
+
+`tsc --init` 或 `node ./node_modules/.bin/tsc --init`
+
+3. `package.json`配置启动命令
+
+```bash
+"scripts": {
+  "dev": "nodemon --watch src -e ts,tsx --exec ts-node src/index.ts",
+  "build": "tsc",
+  "start": "node dist/server.js"
+}
+```
+
 ## TODO
 
 - puppeteer 在服务端打开浏览器并操作
